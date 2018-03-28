@@ -1,0 +1,21 @@
+11:11:35 **** Auto Build of configuration Debug for project TP2 ****
+make all 
+'Building file: ../src/test.c'
+'Invoking: MicroBlaze gcc compiler'
+mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -I../../TP2_bsp/microblaze_0/include -mlittle-endian -mcpu=v9.3 -mxl-soft-mul -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP -MF"src/test.d" -MT"src/test.d" -o "src/test.o" "../src/test.c"
+'Finished building: ../src/test.c'
+' '
+'Building target: TP2.elf'
+'Invoking: MicroBlaze gcc linker'
+mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../TP2_bsp/microblaze_0/lib -mlittle-endian -mcpu=v9.3 -mxl-soft-mul -Wl,--no-relax -Wl,--gc-sections -o "TP2.elf"  ./src/test.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: TP2.elf'
+' '
+'Invoking: MicroBlaze Print Size'
+mb-size TP2.elf  |tee "TP2.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+   3580	    352	   2092	   6024	   1788	TP2.elf
+'Finished building: TP2.elf.size'
+' '
+
+11:11:36 Build Finished (took 1s.495ms)
+

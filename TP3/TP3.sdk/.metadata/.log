@@ -1,0 +1,96 @@
+!SESSION 2017-02-27 09:18:26.942 -----------------------------------------------
+eclipse.buildId=2014.2
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:/Users/3502859/TP/TP2_ex2/TP2_EX22.sdk
+
+!ENTRY org.eclipse.core.resources 2 10035 2017-02-27 09:18:28.034
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+!SESSION 2017-02-27 09:19:55.933 -----------------------------------------------
+eclipse.buildId=2014.2
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:/Users/3502859/TP/TP2_ex2/TP2_EX22.sdk
+
+!ENTRY org.eclipse.core.resources 2 10035 2017-02-27 09:19:57.008
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+!SESSION 2017-02-27 09:21:43.941 -----------------------------------------------
+eclipse.buildId=2014.2
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:/Users/3502859/TP/TP2_ex2/TP2_EX22.sdk
+
+!ENTRY org.eclipse.core.resources 2 10035 2017-02-27 09:21:45.000
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+!SESSION 2017-02-27 09:27:09.030 -----------------------------------------------
+eclipse.buildId=2014.2
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:/Users/3502859/TP/TP2_ex2/TP2_EX22.sdk
+
+!ENTRY org.eclipse.core.resources 2 10035 2017-02-27 09:27:10.127
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.core.jobs 4 2 2017-02-27 09:27:22.519
+!MESSAGE An internal error occurred during: "Monitoring hardware specifications".
+!STACK 0
+java.lang.IllegalStateException: Workspace is closed.
+	at org.eclipse.core.resources.ResourcesPlugin.getWorkspace(ResourcesPlugin.java:399)
+	at com.xilinx.sdk.hw.HwProject.getHwProjectsInWorkspace(HwProject.java:246)
+	at com.xilinx.sdk.hw.sync.HwPlatformMonitor.doMonitorTask(HwPlatformMonitor.java:36)
+	at com.xilinx.sdk.hw.sync.HwPlatformMonitor.access$0(HwPlatformMonitor.java:35)
+	at com.xilinx.sdk.hw.sync.HwPlatformMonitor$1.run(HwPlatformMonitor.java:30)
+	at org.eclipse.swt.widgets.Synchronizer.syncExec(Synchronizer.java:180)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:4687)
+	at com.xilinx.sdk.hw.sync.HwPlatformMonitor.doMonitor(HwPlatformMonitor.java:27)
+	at com.xilinx.sdk.hw.sync.HwPlatformMonitorUtils$1.run(HwPlatformMonitorUtils.java:39)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.core.jobs 2 2 2017-02-27 09:27:22.823
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ui.internal.Workbench$63
+
+!ENTRY org.eclipse.core.jobs 2 2 2017-02-27 09:27:22.824
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: com.xilinx.sdk.startup.InitSDK$6
+!SESSION 2017-02-27 09:28:31.390 -----------------------------------------------
+eclipse.buildId=2014.2
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:/Users/3502859/TP/TP2_ex2/TP2_EX22.sdk
+
+!ENTRY org.eclipse.core.jobs 2 2 2017-02-27 09:29:06.938
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ui.internal.Workbench$63
+!SESSION 2017-02-27 09:53:43.397 -----------------------------------------------
+eclipse.buildId=2014.2
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:/Users/3502859/TP/TP2_ex2/TP2_EX22.sdk
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-02-27 09:56:16.895
+!MESSAGE Indexed 'TP2_bsp' (39 sources, 78 headers) in 1,35 sec: 1 518 declarations; 6 489 references; 23 unresolved inclusions; 4 syntax errors; 9 unresolved names (0,11 %)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-02-27 09:56:17.329
+!MESSAGE Indexed 'TP2' (0 sources, 0 headers) in 0,00 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0,00 %)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-02-27 09:57:29.938
+!MESSAGE Indexed 'TP2_exo2' (0 sources, 0 headers) in 0,00 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0,00 %)
+!SESSION 2017-02-27 11:17:18.410 -----------------------------------------------
+eclipse.buildId=2014.2
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:/Users/3502859/TP/TP3.sdk
+
+!ENTRY org.eclipse.core.resources 2 10035 2017-02-27 11:17:19.503
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-02-27 11:22:03.958
+!MESSAGE Indexed 'TP3' (0 sources, 0 headers) in 0,00 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0,00 %)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-02-27 11:22:04.859
+!MESSAGE Indexed 'TP3_bsp' (41 sources, 80 headers) in 0,89 sec: 1 528 declarations; 6 520 references; 24 unresolved inclusions; 4 syntax errors; 9 unresolved names (0,11 %)

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="false" key="TP2_wrapper_hw_platform_0-runResetZynq"/>
+	<item value="TP2_wrapper_hw_platform_0" key="programfpga.hwplatform"/>
+	<item value="Local" key="TP2_wrapper_hw_platform_0-target"/>
+	<item value="TP2_wrapper.bit" key="TP2_wrapper_hw_platform_0-bitFile"/>
+	<item value="TP2_wrapper_bd.bmm" key="TP2_wrapper_hw_platform_0-bmmFile"/>
+	<item value="bootloop" key="TP2_wrapper_hw_platform_0-TP2_i/microblaze_0-initElf"/>
+</section>

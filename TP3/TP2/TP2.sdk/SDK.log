@@ -1,0 +1,8 @@
+10:20:45 INFO  : Processing command line option -hwspec C:/Users/3502859/TP/TP2/TP2.sdk/TP2_wrapper.hdf.
+10:37:12 INFO  : FPGA configured successfully with bitstream "C:/Users/3502859/TP/TP2/TP2.sdk/TP2_wrapper_hw_platform_0/download.bit"
+10:39:08 INFO  : Processor reset is completed for microblaze_0
+10:39:08 INFO  : Application is downloaded for microblaze_0. (C:\Users\3502859\TP\TP2\TP2.sdk\TP2\Debug\TP2.elf)
+10:59:06 INFO  : FPGA configured successfully with bitstream "C:/Users/3502859/TP/TP2/TP2.sdk/TP2_wrapper_hw_platform_0/download.bit"
+10:59:25 INFO  : Processor reset is completed for microblaze_0
+10:59:25 INFO  : Application is downloaded for microblaze_0. (C:\Users\3502859\TP\TP2\TP2.sdk\TP2\Debug\TP2.elf)
+11:20:26 ERROR : Unexpected error while parsing XMD response ?: com.google.gson.JsonSyntaxException: com.google.gson.stream.MalformedJsonException: invalid number or unquoted string near 

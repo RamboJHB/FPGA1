@@ -1,0 +1,12 @@
+!SESSION 2017-02-20 10:20:37.651 -----------------------------------------------
+eclipse.buildId=2014.2
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:/Users/3502859/TP/TP2/TP2.sdk
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-02-20 10:22:32.527
+!MESSAGE Indexed 'TP2_bsp' (39 sources, 78 headers) in 1,03 sec: 1 518 declarations; 6 489 references; 23 unresolved inclusions; 4 syntax errors; 9 unresolved names (0,11 %)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-02-20 10:22:32.547
+!MESSAGE Indexed 'TP2' (0 sources, 0 headers) in 0,00 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0,00 %)
