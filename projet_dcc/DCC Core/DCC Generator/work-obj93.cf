@@ -1,0 +1,7 @@
+v 3
+file . "REG_DCC.vhdl" "20180425181854.000" "20180425201900.626":
+  entity reg_dcc at 22( 464) + 0 on 61;
+  architecture behavioral of reg_dcc at 46( 1168) + 0 on 62;
+file . "reg_tb.vhdl" "20180425174810.000" "20180425201903.248":
+  entity reg_tb at 22( 464) + 0 on 63;
+  architecture behavioral of reg_tb at 28( 538) + 0 on 64;
