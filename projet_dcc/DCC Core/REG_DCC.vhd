@@ -67,7 +67,7 @@ begin
         end if;
     end process;
 
-    process (EP, Com_reg)
+    process (EP, Com_reg, cpt) --add cpt as sensitive signal
         begin 
         case EP is 
             -- init
@@ -108,7 +108,7 @@ begin
                 if Com_reg = "11" then 
                     EF <= charge_cmd;
                 else 
-                    EF <= cmd_end;
+               EF <= cmd_end;
                 end if; 
             when others => null;
         end case;
