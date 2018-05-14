@@ -53,7 +53,7 @@ signal end_cmd, ena, raz : std_logic;
 ----------------shift and charge
 signal shift_sig, charge_sig : std_logic;
 ----------------mea fsm
-TYPE state IS (init, charge_cmd, hold, sending, shift, cmd_end); 
+TYPE state IS (init, charge_cmd, charge_end, hold, sending, shift, shift_end, cmd_end);
 --------can also use a state register : SIGNAL sreg :std_logic_vector(6 DOWNTO 0);
 signal EP, EF : state;
 
@@ -88,10 +88,19 @@ begin
                 ena <= '0';
                 raz <= '1';
                 shift_sig <= '0';
-                charge_sig <= '1';-- tmp_shift <= Frame_DCC; 
+                charge_sig <= '1';
                               
+                EF <= charge_end;
+            when charge_cmd =>  --state 2
+                fin <= '0';
+                ena <= '0';
+                raz <= '1';
+                shift_sig <= '0';
+                charge_sig <= '0';-- tmp_shift <= Frame_DCC;
+
                 EF <= hold;
-            when hold =>----------------charge next cmd frame   --state 2
+
+            when hold =>   --state 3
                 fin <= '0';
                 ena <= '0';
                 raz <= '0';           
@@ -103,7 +112,7 @@ begin
                 elsif Com_reg = "01" then --next
                     EF <= sending;
                 end if;
-            when sending =>  --state 3
+            when sending =>  --state 4
                 fin <= '0';
                 ena <= '1';
                 raz <= '0';           
@@ -112,12 +121,22 @@ begin
                 
                 --bit_cmd <= tmp_shift(DATA_WIDTH-1);
                 EF <= shift;
-            when shift =>   --state 4
+
+            when shift =>
                 fin <= '0';
                 ena <= '1';
+                raz <= '0';
+                shift_sig <= '1';
+                charge_sig <= '0';
+
+                EF <= hold;
+
+            when shift_end =>   --state 5
+                fin <= '0';
+                ena <= '0';
                 raz <= '0';           
                 charge_sig <= '0';
-                shift_sig <= '1'; --tmp_shift((DATA_WIDTH-1) downto 1) <= tmp_shift((DATA_WIDTH-2) downto 0);       
+                shift_sig <= '0';      
           
                     if cpt = DATA_WIDTH  then
                         EF <= cmd_end;
@@ -128,6 +147,7 @@ begin
                             EF <= sending;
                         end if;
                     end if;
+
             when cmd_end =>  --state 5
                 fin <= '1';
                 ena <= '0';
