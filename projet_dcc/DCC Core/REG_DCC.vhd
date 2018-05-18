@@ -46,8 +46,23 @@ end reg_dcc;
 architecture Behavioral of reg_dcc is
 
 signal bit_cmd, fin : std_logic;
-signal tmp_shift: std_logic_vector(DATA_WIDTH-1 downto 0); 
-signal cpt : integer range 0 to DATA_WIDTH := 0;
+
+signal tmp_in_0: std_logic_vector(1 downto 0); 
+signal tmp_in_1: std_logic_vector(2 downto 0); 
+signal tmp_in_2: std_logic_vector(2 downto 0); 
+signal tmp_in_3: std_logic_vector(2 downto 0); 
+signal tmp_in_4: std_logic_vector(2 downto 0); 
+signal tmp_in_5: std_logic_vector(2 downto 0); 
+signal tmp_in_6: std_logic_vector(2 downto 0); 
+signal tmp_in_7: std_logic_vector(2 downto 0); 
+signal tmp_in_8: std_logic_vector(2 downto 0); 
+signal tmp_in_9: std_logic_vector(2 downto 0); 
+signal tmp_in_10: std_logic_vector(2 downto 0); 
+
+signal tmp_shift: std_logic; 
+signal cpt : integer range 0 to (DATA_WIDTH + 1) := 0;
+
+
 ----------------counter
 signal end_cmd, ena, raz : std_logic;
 ----------------shift and charge
@@ -60,8 +75,10 @@ signal EP, EF : state;
 begin
     FIN_DCC <= fin;
     --cmd <= bit_cmd;
-    cmd <= tmp_shift(DATA_WIDTH-1);
-        ----states
+
+
+    cmd <= tmp_in_10(2);
+    ----states
     process (clk_100MHz, reset)
     begin 
         if reset = '0' then 
@@ -81,7 +98,7 @@ begin
                 raz <= '1';
                 shift_sig <= '0';
                 charge_sig <= '0';
-                
+
                 EF <= charge_cmd;
             when charge_cmd =>  --state 1
                 fin <= '0';                
@@ -91,10 +108,10 @@ begin
                 charge_sig <= '1';
                               
                 EF <= charge_end;
-            when charge_cmd =>  --state 2
+            when charge_end =>  --state 2
                 fin <= '0';
                 ena <= '0';
-                raz <= '1';
+                raz <= '0';
                 shift_sig <= '0';
                 charge_sig <= '0';-- tmp_shift <= Frame_DCC;
 
@@ -111,6 +128,8 @@ begin
                     EF <= hold;
                 elsif Com_reg = "01" then --next
                     EF <= sending;
+                else
+                    EF <=hold;
                 end if;
             when sending =>  --state 4
                 fin <= '0';
@@ -129,7 +148,7 @@ begin
                 shift_sig <= '1';
                 charge_sig <= '0';
 
-                EF <= hold;
+                EF <= shift_end;
 
             when shift_end =>   --state 5
                 fin <= '0';
@@ -145,6 +164,8 @@ begin
                             EF <= hold;
                         elsif Com_reg = "01" then --next
                             EF <= sending;
+                        else 
+                            EF <= charge_cmd;
                         end if;
                     end if;
 
@@ -175,37 +196,86 @@ begin
         end if; 
      end process;
      
-    --  shift
-     process (clk_100MHz)
-          begin 
-              if rising_edge(clk_100MHz) then
-                  if shift_sig = '1' then
-                       tmp_shift((DATA_WIDTH-1) downto 1) <= tmp_shift((DATA_WIDTH-2) downto 0);
-                       tmp_shift(0) <= '0';
-                  end if;
-              end if;
-          end process;
+
           
-    --charge  
-    process (charge_sig)
+    --charge and shift  
+    process (charge_sig, shift_sig)
           begin 
-                    if charge_sig = '1' then
-                        tmp_shift <= Frame_DCC;
-                    end if;
-                end process;          
+             if charge_sig = '1' then
+             tmp_in_10 <= Frame_DCC(DATA_WIDTH-1 downto DATA_WIDTH-3);
+             tmp_in_9 <= Frame_DCC(DATA_WIDTH-4 downto DATA_WIDTH-6);
+             tmp_in_8 <= Frame_DCC(DATA_WIDTH-7 downto DATA_WIDTH-9);
+             tmp_in_7 <= Frame_DCC(DATA_WIDTH-10 downto DATA_WIDTH-12);
+             tmp_in_6 <= Frame_DCC(DATA_WIDTH-13 downto DATA_WIDTH-15);
+             tmp_in_5 <= Frame_DCC(DATA_WIDTH-16 downto DATA_WIDTH-18);
+             tmp_in_4 <= Frame_DCC(DATA_WIDTH-19 downto DATA_WIDTH-21);
+             tmp_in_3 <= Frame_DCC(DATA_WIDTH-22 downto DATA_WIDTH-24);
+             tmp_in_2 <= Frame_DCC(DATA_WIDTH-25 downto DATA_WIDTH-27);
+             tmp_in_1 <= Frame_DCC(DATA_WIDTH-28 downto DATA_WIDTH-30);
+             tmp_in_0 <= Frame_DCC(DATA_WIDTH-31 downto DATA_WIDTH-32); -- 2 bits
+             elsif rising_edge(shift_sig) then
+             tmp_in_10(2 downto 1) <= tmp_in_10(1 downto 0);
+             tmp_in_10(0) <= tmp_in_9(2);
+                                                     
+             tmp_in_9(2 downto 1) <= tmp_in_9(1 downto 0);
+             tmp_in_9(0) <= tmp_in_8(2);
+             
+             tmp_in_8(2 downto 1) <= tmp_in_8(1 downto 0);
+             tmp_in_8(0) <= tmp_in_7(2);
+             
+             tmp_in_7(2 downto 1) <= tmp_in_7(1 downto 0);
+             tmp_in_7(0) <= tmp_in_6(2);
+             
+             tmp_in_6(2 downto 1) <= tmp_in_6(1 downto 0);
+             tmp_in_6(0) <= tmp_in_5(2);
+             
+             tmp_in_5(2 downto 1) <= tmp_in_5(1 downto 0);
+             tmp_in_5(0) <= tmp_in_4(2);
+             
+             tmp_in_4(2 downto 1) <= tmp_in_4(1 downto 0);
+             tmp_in_4(0) <= tmp_in_3(2);
+             
+             tmp_in_3(2 downto 1) <= tmp_in_3(1 downto 0);
+             tmp_in_3(0) <= tmp_in_2(2);
+             
+             tmp_in_2(2 downto 1) <= tmp_in_2(1 downto 0);
+             tmp_in_2(0) <= tmp_in_1(2);
+            
+             tmp_in_1(2 downto 1) <= tmp_in_1(1 downto 0);
+             tmp_in_1(0) <= tmp_in_0(1);
+             
+             tmp_in_0(1) <=tmp_in_0(0);
+             tmp_in_0(0) <= '0';
+             
+             else
+             tmp_in_0 <= tmp_in_0;
+             tmp_in_1 <= tmp_in_1;
+             tmp_in_2 <= tmp_in_2;
+             tmp_in_3 <= tmp_in_3;
+             tmp_in_4 <= tmp_in_4;
+             tmp_in_5 <= tmp_in_5;
+             tmp_in_6 <= tmp_in_6;
+             tmp_in_7 <= tmp_in_7;
+             tmp_in_8 <= tmp_in_8;
+             tmp_in_9 <= tmp_in_9;
+             tmp_in_10 <= tmp_in_10;
+             end if;
+    end process;  
+        
 --    process (reset, Com_reg)
 --        begin 
 --            if reset = '0' then
---                tmp <= Frame_DCC;
+--                tmp_shift <= Frame_DCC;
 --            else 
 --                if Com_reg = "11"   then-- if rising_edge(com_reg(1))then 
 --                    fin <= '0';
---                    tmp <= Frame_DCC;
+--                    tmp_shift <= Frame_DCC;
 --                elsif Com_reg = "01" then    ---------charge and shift
 --                    cpt <= cpt + 1;
---                    cmd <= tmp(DATA_WIDTH-1);
+--                    cmd <= tmp_shift(DATA_WIDTH-1);
 --                    fin <= '0';
---                    tmp(DATA_WIDTH-1 downto 1) <= tmp(DATA_WIDTH-2 downto 0);
+--                    tmp_shift(DATA_WIDTH-1 downto 1) <= tmp_shift(DATA_WIDTH-2 downto 0);
+--                    tmp_shift(0) <= '0';
 --                    if cpt = DATA_WIDTH then 
 --                        fin <= '1';
 --                        cpt <= 0;
