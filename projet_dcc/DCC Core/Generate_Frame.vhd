@@ -21,6 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_unsigned.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -113,23 +114,21 @@ begin
 	if rising_edge(clk_100MHz) then
             if sw(0) & sw (1) & sw (2) & sw (3) & sw(4) = '1' then      --------F0 - F4
 		DCC_Param_Funct(7 downto 5) <= "100";
-
-            	DCC_Param_Funct(0) <= '1' when sw(0) = '1' else '0'; --F0
-     	        DCC_Param_Funct(1) <= '1' when sw(1) = '1' else '0';
-                DCC_Param_Funct(2) <= '1' when sw(2) = '1' else '0';
-   	        DCC_Param_Funct(3) <= '1' when sw(3) = '1' else '0';
-    	        DCC_Param_Funct(4) <= '1' when sw(4) = '1' else '0';
+		if sw(0) = '1' then DCC_Param_Funct(0) <= '1'; else DCC_Param_Funct(0) <= '0'; end if;
+		if sw(1) = '1' then DCC_Param_Funct(1) <= '1'; else DCC_Param_Funct(1) <= '0'; end if;
+		if sw(3) = '1' then DCC_Param_Funct(2) <= '1'; else DCC_Param_Funct(2) <= '0'; end if;
+		if sw(4) = '1' then DCC_Param_Funct(3) <= '1'; else DCC_Param_Funct(3) <= '0'; end if;
             elsif sw(5) & sw (6) & sw (7) & sw(8)  = '1' then           --------F5 - F8
 		DCC_Param_Funct(7 downto 4) <= "1011";
-            	DCC_Param_Funct(0) <= '1' when sw(5) = '1' else '0'; --F0
-     	        DCC_Param_Funct(1) <= '1' when sw(6) = '1' else '0';
-                DCC_Param_Funct(2) <= '1' when sw(7) = '1' else '0';
-                DCC_Param_Funct(3) <= '1' when sw(8) = '1' else '0';
+		if sw(5) = '1' then DCC_Param_Funct(0) <= '1'; else DCC_Param_Funct(0) <= '0'; end if;
+		if sw(6) = '1' then DCC_Param_Funct(1) <= '1'; else DCC_Param_Funct(1) <= '0'; end if;
+		if sw(7) = '1' then DCC_Param_Funct(2) <= '1'; else DCC_Param_Funct(2) <= '0'; end if;
+		if sw(8) = '1' then DCC_Param_Funct(3) <= '1'; else DCC_Param_Funct(3) <= '0'; end if;
 		 
 	    elsif sw(9) & sw (10) = '1' then                           --------F9 - F10
 		DCC_Param_Funct(7 downto 4) <= "1010";
-            	DCC_Param_Funct(0) <= '1' when sw(9) = '1' else '0'; --F0
-     	        DCC_Param_Funct(1) <= '1' when sw(10) = '1' else '0';
+		if sw(9) = '1' then DCC_Param_Funct(0) <= '1'; else DCC_Param_Funct(0) <= '0'; end if;
+		if sw(10) = '1' then DCC_Param_Funct(1) <= '1'; else DCC_Param_Funct(1) <= '0'; end if;
             else
                 DCC_Param_Funct(7 downto 5) <= "110"
             end if;
@@ -185,10 +184,12 @@ begin
                 cpt_btnu <= cpt_btnu + 1;
             end if;
 
-            if cpt_btnu = 234234234 then -- count done
+            if cpt_btnu = "11111010000000" then -- count done
                 if BTNU = '1' then  --still pressing
-                    speed_step <= "0010" when speed_step = "0000" 
-			                  else speed_step + 1 ;      -- bottun function
+		    if speed_step = "0000" then 
+	                speed_step <= "0001";
+		    else 
+			speed_step <= speed_step + 1;
                 end if;
             end if;
 
@@ -212,10 +213,12 @@ begin
                 cpt_btnd <= cpt_btnd + 1;
             end if;
 
-            if cpt_btnd = 234234234 then -- count done
+            if cpt_btnd = "11111010000000" then -- count done
                 if BTND = '1' then  --still pressing
-                    speed_step <= "0001" when speed_step = "0011"
-					 else speed_step - 1 ;  -- bottun function
+ 		    if speed_step = "0001" then 
+	                speed_step <= "0001";
+		    else 
+			speed_step <= speed_step - 1;
 
 
 
@@ -242,10 +245,12 @@ begin
                 cpt_btnl <= cpt_btnl + 1;
             end if;
 
-            if cpt_btnl = 234234234 then -- count done
+            if cpt_btnl = "11111010000000" then -- count done
                 if BTNL = '1' then  --still pressing
-                   DCC_Param_Address <= "00000001" when DCC_Param_Address = "00000010"
-                                                   else "00000001";--switch train
+		    if DCC_Param_Address = "00000001" then 
+	                DCC_Param_Address <= "00000010";
+		    else 
+			DCC_Param_Address <= "00000001";
                 end if;
             end if;
 
@@ -268,13 +273,14 @@ begin
                 cpt_btnr <= cpt_btnr + 1;
             end if;
 
-            if cpt_btnr = 234234234 then -- count done
+            if cpt_btnr = "11111010000000" then -- count done
                 if BTNR = '1' then  --still pressing
-                   DCC_Param_Address <= "00000001" when DCC_Param_Address = "00000010"
-                                                   else "00000001";--switch train
+		    if DCC_Param_Address = "00000001" then 
+	                DCC_Param_Address <= "00000010";
+		    else 
+			DCC_Param_Address <= "00000001";
                 end if;
             end if;
-
             start_r <= '0'; --stop conting 
         end if;
 
