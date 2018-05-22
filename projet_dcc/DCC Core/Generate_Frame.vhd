@@ -58,16 +58,16 @@ signal cpt_btnc, cpt_btnu, cpt_btnd, cpt_btnl, cpt_btnr: std_logic_vector(13 dow
 
 signal Frame_DCC_reg : std_logic_vector(Frame_width-1 downto 0);
 --resgisters
-signal DCC_Param_Address : std_logic_vector(7 downto 0) := "00000000"; ----1st train by defaut
-signal DCC_Param_Speed : std_logic_vector(7 downto 0)   := "01100001";
-signal DCC_Param_Funct : std_logic_vector(7 downto 0);
-signal DCC_Param_Funct_plus : std_logic_vector(16 downto 0);
+signal DCC_Param_Address : std_logic_vector(7 downto 0) := "00000000"; --1st train by defaut
+signal DCC_Param_Speed : std_logic_vector(7 downto 0)   := "01100000"; --
+signal DCC_Param_Funct : std_logic_vector(7 downto 0)   := "10000000"; -- 
+signal DCC_Param_Funct_plus : std_logic_vector(16 downto 0) := "1101111000000000";
 
 signal DCC_Param_Control : std_logic_vector(31 downto 0);
 
 ----------------signal
 --speed cmd
-signal speed_step : std_logic_vector(4 downto 0) := "00000";            ----step 0 by defaut
+signal speed_step : std_logic_vector(3 downto 0) := "0000";            ----step 0 by defaut
 signal direction : std_logic := '0';
 signal speed_cpt : integer range 0 to 28 := 0;
 
@@ -104,37 +104,42 @@ begin
     --address <= 
 
     ----------------------------------set speed--------------------------------
-    DCC_Param_Speed(4 downto 0) <=  speed_step;
+    DCC_Param_Speed(3 downto 0) <=  speed_step;
     DCC_Param_Speed(6) <= direction;
     
-    ---------------------------------setfunction --------------------------------
-    process (clk_100MHz, reset)
+    ---------------------------------set function --------------------------------
+    process (clk_100MHz)
     begin 
-        if reset = '0' then 
+	if rising_edge(clk_100MHz) then
+            if sw(0) & sw (1) & sw (2) & sw (3) & sw(4) = '1' then      --------F0 - F4
+		DCC_Param_Funct(7 downto 5) <= "100";
 
-        elsif rising_edge(clk_100MHz) then
-            case sw is   
-                when "00000000000001"  =>
-                    DCC_Param_Funct <= "000000";
-                when "00000000000010"  =>
-                    DCC_Param_Funct <= "000000";
-                when "00000000000100"  =>
-                    DCC_Param_Funct <= "000000";
-                when "00000000001000"  =>
-                    DCC_Param_Funct <= "000000";
-
-                when others => NULL;
-
-            end case;
+            	DCC_Param_Funct(0) <= '1' when sw(0) = '1' else '0'; --F0
+     	        DCC_Param_Funct(1) <= '1' when sw(1) = '1' else '0';
+                DCC_Param_Funct(2) <= '1' when sw(2) = '1' else '0';
+   	        DCC_Param_Funct(3) <= '1' when sw(3) = '1' else '0';
+    	        DCC_Param_Funct(4) <= '1' when sw(4) = '1' else '0';
+            elsif sw(5) & sw (6) & sw (7) & sw(8)  = '1' then           --------F5 - F8
+		DCC_Param_Funct(7 downto 4) <= "1011";
+            	DCC_Param_Funct(0) <= '1' when sw(5) = '1' else '0'; --F0
+     	        DCC_Param_Funct(1) <= '1' when sw(6) = '1' else '0';
+                DCC_Param_Funct(2) <= '1' when sw(7) = '1' else '0';
+                DCC_Param_Funct(3) <= '1' when sw(8) = '1' else '0';
+		 
+	    elsif sw(9) & sw (10) = '1' then                           --------F9 - F10
+		DCC_Param_Funct(7 downto 4) <= "1010";
+            	DCC_Param_Funct(0) <= '1' when sw(9) = '1' else '0'; --F0
+     	        DCC_Param_Funct(1) <= '1' when sw(10) = '1' else '0';
+            else
+                DCC_Param_Funct(7 downto 5) <= "110"
+            end if;
         end if;
     end process;
-    process (active_go, ac)
+
     ----------------------------------"control" bits--------------------------------  
-    --DCC_Param_Control <= cmd_speed XOR cmd_func;
-    --or
     for i in 0 to 7 loop
         DCC_Param_Control(i) <= DCC_Param_Funct(i) xor DCC_Param_Speed(i);
-    end loop
+    end loop;
     -----------------------------get Button signals---------------------------------
     --center - active_go    - go/stop
     --up     - speed_step+1 - speed up
@@ -182,7 +187,8 @@ begin
 
             if cpt_btnu = 234234234 then -- count done
                 if BTNU = '1' then  --still pressing
-                    speed_step <= speed_step + 1 ;      -- bottun function
+                    speed_step <= "0010" when speed_step = "0000" 
+			                  else speed_step + 1 ;      -- bottun function
                 end if;
             end if;
 
@@ -208,7 +214,8 @@ begin
 
             if cpt_btnd = 234234234 then -- count done
                 if BTND = '1' then  --still pressing
-                    speed_step <= speed_step - 1 ;  -- bottun function
+                    speed_step <= "0001" when speed_step = "0011"
+					 else speed_step - 1 ;  -- bottun function
 
 
 
@@ -237,10 +244,8 @@ begin
 
             if cpt_btnl = 234234234 then -- count done
                 if BTNL = '1' then  --still pressing
-                    DCC_ <= speed_step + 1 ;  -- bottun function
-
-
-
+                   DCC_Param_Address <= "00000001" when DCC_Param_Address = "00000010"
+                                                   else "00000001";--switch train
                 end if;
             end if;
 
