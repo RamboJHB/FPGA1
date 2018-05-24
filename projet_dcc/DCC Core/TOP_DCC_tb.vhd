@@ -40,11 +40,18 @@ ARCHITECTURE behavior OF TOP_DCC_tb IS
     -- Component Declaration for the Unit Under Test (UUT)
  
     COMPONENT TOP_DCC
-    PORT(
-         clk_100MHz : IN  std_logic;
-         reset : IN  std_logic;
-         Frame_DCC : IN  std_logic_vector(31 downto 0);
-         Out_to_Train : OUT  std_logic
+
+        generic ( Data_Width_DCC : integer := 50);
+        Port ( clk_100MHz : in STD_LOGIC;
+               reset : in STD_LOGIC;
+               Out_to_Train : out STD_LOGIC;
+               sw  : in STD_LOGIC_VECTOR(13 downto 0);
+               leds    : out STD_LOGIC_VECTOR(15 downto 0);
+               BNTC    : in STD_LOGIC;
+               BNTU    : in STD_LOGIC;
+               BNTD    : in STD_LOGIC;
+               BNTL    : in STD_LOGIC;
+               BNTR    : in STD_LOGIC
         );
     END COMPONENT;
     
@@ -52,7 +59,6 @@ ARCHITECTURE behavior OF TOP_DCC_tb IS
    --Inputs
    signal clk_100MHz : std_logic := '0';
    signal reset : std_logic := '1';
-   signal Frame_DCC : std_logic_vector(31 downto 0) := (others => '1');
 
  	--Outputs
    signal Out_to_Train : std_logic;
@@ -60,14 +66,29 @@ ARCHITECTURE behavior OF TOP_DCC_tb IS
    -- Clock period definitions
    constant clk_100MHz_period : time := 10 ns;
  
+    signal sw  : STD_LOGIC_VECTOR(13 downto 0);
+    signal leds    : STD_LOGIC_VECTOR(15 downto 0);
+    signal BNTC ,BNTU ,BNTD  ,BNTL ,BNTR :  STD_LOGIC;
+ 
 BEGIN
+    sw(0) <= '0', '1' after 5 ms, '0' after 6 ms;
+    BNTC <= '0', '1'after  20ms , '0' after 30ms ;
+    BNTU <= '0', '1'after  50ms , '0' after 60ms;
+
 	-- Instantiate the Unit Under Test (UUT)
    uut: TOP_DCC PORT MAP (
           clk_100MHz => clk_100MHz,
           reset => reset,
-          Frame_DCC => Frame_DCC,
-          Out_to_Train => Out_to_Train
-        );
+          Out_to_Train => Out_to_Train,
+                     sw  => sw,
+                     leds => leds,
+                     BNTC  => BNTC,
+                     BNTU  => BNTU,
+                     BNTD  => BNTD,
+                     BNTL  => BNTL,
+                     BNTR   => BNTR
+              );
+
 
    -- Clock process definitions
    clk_100MHz_process :process
