@@ -33,11 +33,17 @@ use ieee.std_logic_unsigned.all;
 --use UNISIM.VComponents.all;
 
 entity Gene_Frame is
-    generic ( Frame_width : integer := 50 );
+
     Port (  clk_100MHz: in STD_LOGIC;
             reset : in std_logic;
             ------register dcc------
-            Frame_DCC: out std_logic_vector(Frame_width-1 downto 0);
+            Frame_DCC_0 : out STD_LOGIC_VECTOR(2 downto 0);  -- LSB 
+            Frame_DCC_1 : out STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_2 : out STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_3 : out STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_4 : out STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_5 : out STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_6 : out STD_LOGIC_VECTOR(7 downto 0);  --MSB
             ------user interface------
             sw  : in STD_LOGIC_VECTOR(13 downto 0);
             leds     : out STD_LOGIC_VECTOR(15 downto 0);
@@ -57,7 +63,6 @@ signal start_c, start_u, start_d, start_l, start_r : std_logic;
 signal lock_c, lock_u, lock_d, lock_l, lock_r  : std_logic;
 signal cpt_btnc, cpt_btnu, cpt_btnd, cpt_btnl, cpt_btnr: std_logic_vector(13 downto 0):=(others => '0');
 
-signal Frame_DCC_reg : std_logic_vector(Frame_width-1 downto 0);
 --resgisters
 signal DCC_Param_Address : std_logic_vector(7 downto 0) := "00000000"; --1st train by defaut
 signal DCC_Param_Speed : std_logic_vector(7 downto 0)   := "01100000"; --
@@ -76,25 +81,33 @@ signal active_go : std_logic := '0';
 
 begin
     --------------------------------output------------------------------
-    Frame_DCC <= Frame_DCC_reg;
+    --Frame_DCC <= Frame_DCC_reg;
 
     leds(15) <= active_go;
     leds(3 DOWNTO 0) <= speed_step;
-
+    leds(14 downto 4) <= "00000000000";
     -------------------------constructor Frame_DCC ---------------------
-    Frame_DCC_reg( 49 downto 35) <= "111111111111110"; -- 14 bits '1' start bit 0 
-    Frame_DCC_reg( 34 downto 27 ) <= DCC_Param_Address;-- 8 bits address
-    Frame_DCC_reg(26) <= '0';
+    --Frame_DCC_reg( 49 downto 35) <= "111111111111110"; -- 14 bits '1' start bit 0 
+    Frame_DCC_6 <= "11111111";
+    Frame_DCC_5(7 downto 1) <= "1111110";
+    --Frame_DCC_reg( 34 downto 27 ) <= DCC_Param_Address;-- 8 bits address
+    Frame_DCC_5(0) <= DCC_Param_Address(7);
+    Frame_DCC_4(7 downto 1) <= DCC_Param_Address(6 downto 0);
+    --Frame_DCC_reg(26) <= '0';
+    Frame_DCC_4(0) <= '0'; 
     --func 0 -12 : cmd_speed = 110 xxxxx
-    Frame_DCC_reg( 25 downto 18 ) <= DCC_Param_Speed; 
-    Frame_DCC_reg( 17 downto 10 ) <= DCC_Param_Funct;
-
+    --Frame_DCC_reg( 25 downto 18 ) <= DCC_Param_Speed; 
+    Frame_DCC_3 <= DCC_Param_Speed;
+    --Frame_DCC_reg( 17 downto 10 ) <= DCC_Param_Funct;
+    Frame_DCC_2 <= DCC_Param_Funct;
     --if function cmd is 16 bit (F13-F20)
         --Frame_DCC_reg( 22 downto 14 ) <= DCC_Param_Funct; --func13-20 : cmd_speed = 110 11110 
         --Frame_DCC_reg( 16 downto 9 ) <= DCC_Param_Funct_plus;
-    Frame_DCC_reg(9) <= '0';
-    Frame_DCC_reg( 8 downto 1 ) <= DCC_Param_Control;
-    Frame_DCC_reg(0) <= '1';
+    --Frame_DCC_reg(9) <= '0';
+    Frame_DCC_1 (7) <= '0';
+    Frame_DCC_1( 6 downto 0 ) <= DCC_Param_Control( 7 downto 1 );
+    Frame_DCC_0(1) <= DCC_Param_Control(0);
+    Frame_DCC_0(0) <= '1';
 
 
     ------------------------------choose train ----------------------------
