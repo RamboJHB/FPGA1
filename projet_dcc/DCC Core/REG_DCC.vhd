@@ -32,11 +32,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity reg_dcc is
-    generic (DATA_WIDTH	: integer := 32);
-
     Port (  clk_100MHz: in STD_LOGIC;
             reset : in std_logic;
-            Frame_DCC : in STD_LOGIC_VECTOR(DATA_WIDTH-1 downto 0);
+            Frame_DCC_0 : in STD_LOGIC_VECTOR(2 downto 0);  --LSB 
+            Frame_DCC_1 : in STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_2 : in STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_3 : in STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_4 : in STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_5 : in STD_LOGIC_VECTOR(7 downto 0);
+            Frame_DCC_6 : in STD_LOGIC_VECTOR(7 downto 0);  --MSB
+
             Com_reg: in STD_LOGIC_VECTOR(1 downto 0);
             FIN_DCC: out std_logic;
             cmd : out STD_LOGIC
@@ -47,20 +52,29 @@ architecture Behavioral of reg_dcc is
 
 signal bit_cmd, fin : std_logic;
 
-signal tmp_in_0: std_logic_vector(1 downto 0); 
-signal tmp_in_1: std_logic_vector(2 downto 0); 
-signal tmp_in_2: std_logic_vector(2 downto 0); 
-signal tmp_in_3: std_logic_vector(2 downto 0); 
-signal tmp_in_4: std_logic_vector(2 downto 0); 
-signal tmp_in_5: std_logic_vector(2 downto 0); 
-signal tmp_in_6: std_logic_vector(2 downto 0); 
-signal tmp_in_7: std_logic_vector(2 downto 0); 
-signal tmp_in_8: std_logic_vector(2 downto 0); 
-signal tmp_in_9: std_logic_vector(2 downto 0); 
-signal tmp_in_10: std_logic_vector(2 downto 0); 
+--signal tmp_in_0: std_logic_vector(1 downto 0); 
+--signal tmp_in_1: std_logic_vector(2 downto 0); 
+--signal tmp_in_2: std_logic_vector(2 downto 0); 
+--signal tmp_in_3: std_logic_vector(2 downto 0); 
+--signal tmp_in_4: std_logic_vector(2 downto 0); 
+--signal tmp_in_5: std_logic_vector(2 downto 0); 
+--signal tmp_in_6: std_logic_vector(2 downto 0); 
+--signal tmp_in_7: std_logic_vector(2 downto 0); 
+--signal tmp_in_8: std_logic_vector(2 downto 0); 
+--signal tmp_in_9: std_logic_vector(2 downto 0); 
+--signal tmp_in_10: std_logic_vector(2 downto 0); 
 
+signal tmp_in_0: std_logic_vector(2 downto 0); 
+signal tmp_in_1: std_logic_vector(7 downto 0); 
+signal tmp_in_2: std_logic_vector(7 downto 0); 
+signal tmp_in_3: std_logic_vector(7 downto 0); 
+signal tmp_in_4: std_logic_vector(7 downto 0); 
+signal tmp_in_5: std_logic_vector(7 downto 0); 
+signal tmp_in_6: std_logic_vector(7 downto 0); 
+
+ 
 signal tmp_shift: std_logic; 
-signal cpt : integer range 0 to (DATA_WIDTH + 1) := 0;
+signal cpt : integer range 0 to 51 := 0;
 
 
 ----------------counter
@@ -74,10 +88,8 @@ signal EP, EF : state;
 
 begin
     FIN_DCC <= fin;
-    --cmd <= bit_cmd;
-
-
-    cmd <= tmp_in_10(2);
+    cmd <= tmp_in_6(2);
+    --cmd <= tmp_in_10(2);
     ----states
     process (clk_100MHz, reset)
     begin 
@@ -157,7 +169,7 @@ begin
                 charge_sig <= '0';
                 shift_sig <= '0';      
           
-                    if cpt = DATA_WIDTH  then
+                    if cpt = 50  then
                         EF <= cmd_end;
                     else
                         if Com_reg = "00" then --hold
@@ -202,63 +214,94 @@ begin
     process (charge_sig, shift_sig)
           begin 
              if charge_sig = '1' then
-             tmp_in_10 <= Frame_DCC(DATA_WIDTH-1 downto DATA_WIDTH-3);
-             tmp_in_9 <= Frame_DCC(DATA_WIDTH-4 downto DATA_WIDTH-6);
-             tmp_in_8 <= Frame_DCC(DATA_WIDTH-7 downto DATA_WIDTH-9);
-             tmp_in_7 <= Frame_DCC(DATA_WIDTH-10 downto DATA_WIDTH-12);
-             tmp_in_6 <= Frame_DCC(DATA_WIDTH-13 downto DATA_WIDTH-15);
-             tmp_in_5 <= Frame_DCC(DATA_WIDTH-16 downto DATA_WIDTH-18);
-             tmp_in_4 <= Frame_DCC(DATA_WIDTH-19 downto DATA_WIDTH-21);
-             tmp_in_3 <= Frame_DCC(DATA_WIDTH-22 downto DATA_WIDTH-24);
-             tmp_in_2 <= Frame_DCC(DATA_WIDTH-25 downto DATA_WIDTH-27);
-             tmp_in_1 <= Frame_DCC(DATA_WIDTH-28 downto DATA_WIDTH-30);
-             tmp_in_0 <= Frame_DCC(DATA_WIDTH-31 downto DATA_WIDTH-32); -- 2 bits
+--             tmp_in_10 <= Frame_DCC_7(DATA_WIDTH-1 downto DATA_WIDTH-3);
+--             tmp_in_9 <= Frame_DCC(DATA_WIDTH-4 downto DATA_WIDTH-6);
+--             tmp_in_8 <= Frame_DCC(DATA_WIDTH-7 downto DATA_WIDTH-9);
+--             tmp_in_7 <= Frame_DCC(DATA_WIDTH-10 downto DATA_WIDTH-12);
+--             tmp_in_6 <= Frame_DCC(DATA_WIDTH-13 downto DATA_WIDTH-15);
+--             tmp_in_5 <= Frame_DCC(DATA_WIDTH-16 downto DATA_WIDTH-18);
+--             tmp_in_4 <= Frame_DCC(DATA_WIDTH-19 downto DATA_WIDTH-21);
+--             tmp_in_3 <= Frame_DCC(DATA_WIDTH-22 downto DATA_WIDTH-24);
+--             tmp_in_2 <= Frame_DCC(DATA_WIDTH-25 downto DATA_WIDTH-27);
+--             tmp_in_1 <= Frame_DCC(DATA_WIDTH-28 downto DATA_WIDTH-30);
+--             tmp_in_0 <= Frame_DCC(DATA_WIDTH-31 downto DATA_WIDTH-32); -- 2 bits
+                tmp_in_0 <= Frame_DCC_0; -- lsb 2 bits
+                tmp_in_1 <= Frame_DCC_1; -- 8 bits
+                tmp_in_2 <= Frame_DCC_2; -- 8 bits
+                tmp_in_3 <= Frame_DCC_3; -- 8 bits
+                tmp_in_4 <= Frame_DCC_4; -- 8 bits
+                tmp_in_5 <= Frame_DCC_5; -- 8 bits
+                tmp_in_6 <= Frame_DCC_6; -- msb 8 bits
+                
+                
              elsif rising_edge(shift_sig) then
-             tmp_in_10(2 downto 1) <= tmp_in_10(1 downto 0);
-             tmp_in_10(0) <= tmp_in_9(2);
-                                                     
-             tmp_in_9(2 downto 1) <= tmp_in_9(1 downto 0);
-             tmp_in_9(0) <= tmp_in_8(2);
+
+                tmp_in_6(7 downto 1) <= tmp_in_6(6 downto 0);
+                tmp_in_6(0) <= tmp_in_5(7);
              
-             tmp_in_8(2 downto 1) <= tmp_in_8(1 downto 0);
-             tmp_in_8(0) <= tmp_in_7(2);
+                tmp_in_5(7 downto 1) <= tmp_in_5(6 downto 0);
+                tmp_in_5(0) <= tmp_in_4(7);
              
-             tmp_in_7(2 downto 1) <= tmp_in_7(1 downto 0);
-             tmp_in_7(0) <= tmp_in_6(2);
+                tmp_in_4(7 downto 1) <= tmp_in_4(6 downto 0);
+                tmp_in_4(0) <= tmp_in_3(7);
              
-             tmp_in_6(2 downto 1) <= tmp_in_6(1 downto 0);
-             tmp_in_6(0) <= tmp_in_5(2);
+                tmp_in_3(7 downto 1) <= tmp_in_3(6 downto 0);
+                tmp_in_3(0) <= tmp_in_2(7);
              
-             tmp_in_5(2 downto 1) <= tmp_in_5(1 downto 0);
-             tmp_in_5(0) <= tmp_in_4(2);
-             
-             tmp_in_4(2 downto 1) <= tmp_in_4(1 downto 0);
-             tmp_in_4(0) <= tmp_in_3(2);
-             
-             tmp_in_3(2 downto 1) <= tmp_in_3(1 downto 0);
-             tmp_in_3(0) <= tmp_in_2(2);
-             
-             tmp_in_2(2 downto 1) <= tmp_in_2(1 downto 0);
-             tmp_in_2(0) <= tmp_in_1(2);
+                tmp_in_2(7 downto 1) <= tmp_in_2(6 downto 0);
+                tmp_in_2(0) <= tmp_in_1(7);
             
-             tmp_in_1(2 downto 1) <= tmp_in_1(1 downto 0);
-             tmp_in_1(0) <= tmp_in_0(1);
+                tmp_in_1(7 downto 1) <= tmp_in_1(6 downto 0);
+                tmp_in_1(0) <= tmp_in_0(1);
              
-             tmp_in_0(1) <=tmp_in_0(0);
-             tmp_in_0(0) <= '0';
+               tmp_in_0(1) <=tmp_in_0(0);
+               tmp_in_0(0) <= '0';
+                
+--             tmp_in_10(2 downto 1) <= tmp_in_10(1 downto 0);
+--             tmp_in_10(0) <= tmp_in_9(2);
+                                                     
+--             tmp_in_9(2 downto 1) <= tmp_in_9(1 downto 0);
+--             tmp_in_9(0) <= tmp_in_8(2);
+             
+--             tmp_in_8(2 downto 1) <= tmp_in_8(1 downto 0);
+--             tmp_in_8(0) <= tmp_in_7(2);
+             
+--             tmp_in_7(2 downto 1) <= tmp_in_7(1 downto 0);
+--             tmp_in_7(0) <= tmp_in_6(2);
+             
+--             tmp_in_6(2 downto 1) <= tmp_in_6(1 downto 0);
+--             tmp_in_6(0) <= tmp_in_5(2);
+             
+--             tmp_in_5(2 downto 1) <= tmp_in_5(1 downto 0);
+--             tmp_in_5(0) <= tmp_in_4(2);
+             
+--             tmp_in_4(2 downto 1) <= tmp_in_4(1 downto 0);
+--             tmp_in_4(0) <= tmp_in_3(2);
+             
+--             tmp_in_3(2 downto 1) <= tmp_in_3(1 downto 0);
+--             tmp_in_3(0) <= tmp_in_2(2);
+             
+--             tmp_in_2(2 downto 1) <= tmp_in_2(1 downto 0);
+--             tmp_in_2(0) <= tmp_in_1(2);
+            
+--             tmp_in_1(2 downto 1) <= tmp_in_1(1 downto 0);
+--             tmp_in_1(0) <= tmp_in_0(1);
+             
+--             tmp_in_0(1) <=tmp_in_0(0);
+--             tmp_in_0(0) <= '0';
              
              else
-             tmp_in_0 <= tmp_in_0;
-             tmp_in_1 <= tmp_in_1;
-             tmp_in_2 <= tmp_in_2;
-             tmp_in_3 <= tmp_in_3;
-             tmp_in_4 <= tmp_in_4;
-             tmp_in_5 <= tmp_in_5;
-             tmp_in_6 <= tmp_in_6;
-             tmp_in_7 <= tmp_in_7;
-             tmp_in_8 <= tmp_in_8;
-             tmp_in_9 <= tmp_in_9;
-             tmp_in_10 <= tmp_in_10;
+                tmp_in_0 <= tmp_in_0;
+                tmp_in_1 <= tmp_in_1;
+                tmp_in_2 <= tmp_in_2;
+                tmp_in_3 <= tmp_in_3;
+                tmp_in_4 <= tmp_in_4;
+                tmp_in_5 <= tmp_in_5;
+                tmp_in_6 <= tmp_in_6;
+--                tmp_in_7 <= tmp_in_7;
+--             tmp_in_8 <= tmp_in_8;
+--             tmp_in_9 <= tmp_in_9;
+--             tmp_in_10 <= tmp_in_10;
              end if;
     end process;  
         
